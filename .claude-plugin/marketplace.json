@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agentfit-local",
+  "description": "Local development marketplace for the AgentFit embedded Skill intelligence layer.",
+  "owner": {
+    "name": "AgentFit Project"
+  },
+  "plugins": [
+    {
+      "name": "agentfit",
+      "source": "./adapters/claude-code/agentfit",
+      "description": "Recommend and compose Skills, research GitHub evidence, remember confirmed preferences, and prepare verified install requests.",
+      "version": "0.1.0",
+      "author": {
+        "name": "AgentFit Project"
+      },
+      "category": "productivity"
+    }
+  ]
+}

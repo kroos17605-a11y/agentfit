@@ -1,0 +1,17 @@
+# AgentFit runtime state and local test outputs
+.agentfit/
+.runtime/
+output/
+tmp/
+
+# Node and Python environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/

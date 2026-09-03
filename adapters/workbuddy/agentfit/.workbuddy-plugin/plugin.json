@@ -1,0 +1,9 @@
+{
+  "name": "agentfit",
+  "version": "0.1.0",
+  "description": "Office-work routing for WorkBuddy: decompose PPT, research, reports, data, project/product, proposal, meeting, and document tasks; automatically discover WorkBuddy/GitHub Skills, MCP servers, plugins, and installable projects before asking about installation.",
+  "author": {
+    "name": "AgentFit Project"
+  },
+  "skills": "./skills/"
+}

@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "agentfit-local": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/kroos/Documents/ChatGPT/New project/agentfit"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "agentfit@agentfit-local": true
+  }
+}

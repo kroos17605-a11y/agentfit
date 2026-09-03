@@ -1,0 +1,19 @@
+{
+  "name": "agentfit-layer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Embedded Skill intelligence layer for WorkBuddy, Codex, and Claude Code.",
+  "scripts": {
+    "recommend": "node src/cli.mjs recommend",
+    "test": "node --test tests/*.test.mjs",
+    "eval:offline": "node scripts/evaluate-recommendations.mjs",
+    "eval:product": "node scripts/evaluate-agentfit.mjs",
+    "package:adapters": "node scripts/package-adapters.mjs",
+    "check": "npm run test && npm run eval:offline && npm run package:adapters && node scripts/check-packages.mjs",
+    "test:codex-marketplace": "npm run package:adapters && node scripts/check-packages.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

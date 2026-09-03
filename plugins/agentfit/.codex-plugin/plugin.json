@@ -1,0 +1,27 @@
+{
+  "name": "agentfit",
+  "version": "0.1.0+codex.20260903092714",
+  "description": "Office-work routing layer for PPT, research, reports, data analysis, project management, product design, PRD, roadmaps, proposals, meeting notes, and document tasks. Automatically decomposes the task and discovers relevant Skills, MCP servers, plugins, and installable projects before execution.",
+  "author": {
+    "name": "AgentFit Project"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AgentFit",
+    "shortDescription": "Office task decomposition and component discovery",
+    "longDescription": "For everyday office and knowledge work, AgentFit decomposes the task, generates search keywords, automatically researches GitHub candidates, and asks before installation or execution.",
+    "developerName": "AgentFit Project",
+    "category": "Productivity",
+    "capabilities": [
+      "Office task-to-workflow planning",
+      "GitHub Skill, MCP, and plugin discovery",
+      "Approved local work-pattern learning",
+      "Daily GitHub Skill research",
+      "Verified installs"
+    ],
+    "defaultPrompt": [
+      "For office tasks (PPT, research, reports, data analysis, project/product planning, proposals, meetings, documents), automatically use AgentFit to decompose the task and discover components before execution.",
+      "Use $agentfit when automatic activation is not selected; it will search GitHub candidates and ask before installation."
+    ]
+  }
+}

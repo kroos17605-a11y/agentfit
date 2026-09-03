@@ -1,0 +1,19 @@
+{
+  "name": "agentfit-workbuddy-local",
+  "description": "Local development marketplace for the AgentFit WorkBuddy adapter.",
+  "owner": {
+    "name": "AgentFit Project"
+  },
+  "plugins": [
+    {
+      "name": "agentfit",
+      "source": "./adapters/workbuddy/agentfit",
+      "description": "Recommend and compose Skills, prepare native WorkBuddy search handoffs, retain confirmed preferences, and prepare verified install requests.",
+      "version": "0.1.0",
+      "author": {
+        "name": "AgentFit Project"
+      },
+      "category": "productivity"
+    }
+  ]
+}
