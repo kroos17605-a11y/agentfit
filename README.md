@@ -114,6 +114,8 @@ This repository carries two project-local marketplaces so a developer can test t
 - Claude Code: `.claude-plugin/marketplace.json` exposes `./adapters/claude-code/agentfit`.
 - WorkBuddy: `.workbuddy-plugin/marketplace.json` exposes `./adapters/workbuddy/agentfit`; the adapter now includes a native `.workbuddy-plugin/plugin.json` manifest.
 
+The Codex plugin is explicitly documented in [`plugins/agentfit/README.md`](plugins/agentfit/README.md). Its manifest is [`plugins/agentfit/.codex-plugin/plugin.json`](plugins/agentfit/.codex-plugin/plugin.json); `.codex-plugin` is a required hidden directory name, not a missing file.
+
 Both marketplaces are intentionally local development artifacts. On a new machine, register the project root in the relevant host, install only `agentfit`, then start a **new** host conversation for representative prompts. The host package may be installed; no third-party Skill is installed by this workflow.
 
 For Codex, the most reliable smoke test is to start a new conversation after installing or reloading the local plugin and begin the request with `$agentfit`, for example: `$agentfit 帮我调研公开 AI 产品趋势并整理成决策报告`. The response must show the outcome, the minimal workflow, and how each step is covered. It must skip GitHub when installed or host-native capabilities cover every step; otherwise it performs read-only discovery only for the gaps and stops before each new installation. After Codex creates the artifact, AgentFit must run the quality gate. If `$agentfit` is unknown, the plugin is not loaded in that session; reinstall the local marketplace entry or reload plugins, then start a new conversation.
