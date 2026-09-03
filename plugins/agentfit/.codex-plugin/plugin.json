@@ -1,6 +1,6 @@
 {
   "name": "agentfit",
-  "version": "0.1.0+codex.20260903092714",
+  "version": "0.1.0+codex.20260903190028",
   "description": "Office-work routing layer for PPT, research, reports, data analysis, project management, product design, PRD, roadmaps, proposals, meeting notes, and document tasks. Automatically decomposes the task and discovers relevant Skills, MCP servers, plugins, and installable projects before execution.",
   "author": {
     "name": "AgentFit Project"
