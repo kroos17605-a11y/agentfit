@@ -3,7 +3,7 @@
     "agentfit-local": {
       "source": {
         "source": "directory",
-        "path": "/Users/kroos/Documents/ChatGPT/New project/agentfit"
+        "path": "."
       }
     }
   },
