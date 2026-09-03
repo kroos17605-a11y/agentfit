@@ -9,7 +9,6 @@
     "test": "node --test tests/*.test.mjs",
     "eval:offline": "node scripts/evaluate-recommendations.mjs",
     "eval:product": "node scripts/evaluate-agentfit.mjs",
-    "demo": "node scripts/product-demo.mjs",
     "package:adapters": "node scripts/package-adapters.mjs",
     "check": "npm run test && npm run eval:offline && npm run package:adapters && node scripts/check-packages.mjs",
     "test:codex-marketplace": "npm run package:adapters && node scripts/check-packages.mjs"
