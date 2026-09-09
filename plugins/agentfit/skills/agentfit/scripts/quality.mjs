@@ -130,6 +130,12 @@ export function evaluateQualityGate(contract, evidence = {}, { attempt = 1 } = {
   if (effectiveEvidence.artifactExists === true && !(typeof evidence.artifactPath === 'string' && evidence.artifactPath.trim())) {
     evidenceWarnings.push('artifactPath 未提供；artifactExists 仍属于宿主声明，不能证明文件真实存在。');
   }
+  if (checks.some((check) => check.id === 'visual-readability') && effectiveEvidence.visualReviewPassed === true && !evidence.renderEvidencePath) {
+    evidenceWarnings.push('visualReviewPassed 未附渲染证据路径；只能证明宿主声明，不能证明视觉质量。');
+  }
+  if (evidence.baselinePath && evidence.artifactPath && evidence.baselinePath === evidence.artifactPath) {
+    evidenceWarnings.push('baselinePath 与 artifactPath 相同；无法证明本次产生了改进。');
+  }
   return {
     status: failed.length === 0 ? 'passed' : canRetry ? 'needs-revision' : 'needs-user-decision',
     attempt,
