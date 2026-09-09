@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentFit 产品大图｜企业竞品调研</title>
+  <style>
+    :root {
+      --ink: #132238;
+      --muted: #5f6f83;
+      --line: #d8e1ec;
+      --paper: #f5f8fb;
+      --white: #ffffff;
+      --blue: #2764d8;
+      --blue-soft: #e9f0ff;
+      --teal: #098778;
+      --teal-soft: #e5f7f3;
+      --orange: #b96a08;
+      --orange-soft: #fff1da;
+      --red: #b73b4a;
+      --red-soft: #fff0f1;
+      --violet: #6449b7;
+      --violet-soft: #f0ecff;
+      --shadow: 0 14px 30px rgba(25, 46, 76, .09);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--paper); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    body { padding: 28px 32px 54px; }
+    .shell { max-width: 1640px; margin: 0 auto; }
+    header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 20px; }
+    .eyebrow { font-size: 12px; letter-spacing: .13em; font-weight: 800; color: var(--blue); text-transform: uppercase; }
+    h1 { margin: 7px 0 8px; font-size: clamp(28px, 3vw, 44px); line-height: 1.08; letter-spacing: -.03em; }
+    .lede { margin: 0; max-width: 800px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+    .outcome { min-width: 275px; padding: 16px 18px; border: 1px solid #c9d8ea; border-radius: 10px; background: #fff; box-shadow: 0 5px 18px rgba(30,55,90,.05); }
+    .outcome strong { display: block; font-size: 13px; margin-bottom: 7px; }
+    .outcome span { display: block; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 13px 16px; background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 4px 14px rgba(30,55,90,.04); margin-bottom: 15px; }
+    .legend-title { font-size: 12px; font-weight: 800; margin-right: 2px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #44546a; }
+    .swatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid transparent; }
+    .swatch.role { background: var(--blue-soft); border-color: #a8c4ff; }
+    .swatch.step { background: #fff; border-color: #99acc3; }
+    .swatch.hitl { background: var(--orange-soft); border-color: #e9b55e; }
+    .swatch.cap { background: var(--teal-soft); border-color: #81d1c4; }
+    .swatch.data { background: var(--violet-soft); border-color: #b9a9ec; }
+    .swatch.gate { background: var(--red-soft); border-color: #e3a2a9; }
+    .map-frame { overflow-x: auto; overflow-y: hidden; padding-bottom: 13px; border-radius: 13px; scrollbar-color: #a9bad0 transparent; }
+    .map { position: relative; min-width: 1540px; min-height: 980px; background: #fff; border: 1px solid var(--line); border-radius: 13px; box-shadow: var(--shadow); overflow: hidden; }
+    .map-title { position: absolute; left: 24px; top: 19px; z-index: 3; font-weight: 800; font-size: 15px; }
+    .map-caption { position: absolute; left: 24px; top: 46px; z-index: 3; color: var(--muted); font-size: 12px; }
+    .band { position: absolute; left: 0; right: 0; display: flex; align-items: center; padding-left: 24px; border-top: 1px solid #e5ebf2; }
+    .band label { width: 126px; font-size: 11px; line-height: 1.35; font-weight: 800; letter-spacing: .06em; color: #73839a; text-transform: uppercase; }
+    .band.role { top: 84px; height: 93px; background: #fbfcfe; }
+    .band.flow { top: 177px; height: 300px; background: #fff; }
+    .band.state { top: 477px; height: 138px; background: #fbfcfe; }
+    .band.human { top: 615px; height: 119px; background: #fff; }
+    .band.cap { top: 734px; height: 132px; background: #fbfcfe; }
+    .band.data { top: 866px; height: 114px; background: #fff; }
+    .band-content { position: absolute; left: 159px; right: 23px; top: 0; bottom: 0; }
+    .role-chip { position: absolute; top: 23px; min-width: 154px; padding: 10px 13px; border-radius: 8px; border: 1px solid #acc4ef; background: var(--blue-soft); }
+    .role-chip b { display: block; font-size: 12px; margin-bottom: 2px; }
+    .role-chip small { display: block; color: #49668e; font-size: 11px; }
+    .role-chip.user { left: 0; }
+    .role-chip.owner { left: 355px; }
+    .role-chip.agent { left: 740px; }
+    .role-chip.fit { left: 1105px; }
+    svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+    .node { position: absolute; z-index: 2; border: 1px solid #9eb1c8; border-radius: 9px; background: #fff; box-shadow: 0 4px 11px rgba(36,59,90,.07); }
+    .node .num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; margin: 10px 8px 0 11px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; vertical-align: top; }
+    .node .txt { display: inline-block; width: calc(100% - 48px); vertical-align: top; margin-top: 10px; font-size: 12px; font-weight: 800; line-height: 1.28; }
+    .node p { margin: 4px 11px 11px; color: var(--muted); font-size: 10.5px; line-height: 1.42; }
+    .node.input { width: 166px; height: 94px; left: 0; top: 52px; border-color: #93afe0; }
+    .node.infer { width: 166px; height: 94px; left: 185px; top: 52px; }
+    .node.inventory { width: 173px; height: 105px; left: 369px; top: 45px; border-color: #5db7aa; background: var(--teal-soft); }
+    .node.match { width: 173px; height: 105px; left: 561px; top: 45px; border-color: #5db7aa; background: var(--teal-soft); }
+    .node.gap { width: 178px; height: 108px; left: 754px; top: 43px; border-color: #dfaa59; background: var(--orange-soft); }
+    .node.exec { width: 170px; height: 101px; left: 952px; top: 47px; border-color: #9eb1c8; }
+    .node.qa { width: 165px; height: 101px; left: 1141px; top: 47px; border-color: #d797a0; background: var(--red-soft); }
+    .node.learn { width: 169px; height: 101px; left: 1325px; top: 47px; border-color: #b5a3e9; background: var(--violet-soft); }
+    .pill { display: inline-block; margin: 0 11px 10px; padding: 3px 7px; border-radius: 4px; font-size: 10px; font-weight: 800; color: #4e5d72; background: rgba(255,255,255,.7); border: 1px solid rgba(126,145,171,.42); }
+    .state-track { position: absolute; top: 51px; left: 0; right: 0; display: flex; gap: 20px; align-items: center; }
+    .state-item { width: 144px; min-height: 56px; padding: 9px 10px; border-radius: 8px; border: 1px dashed #9eb1c8; background: #fff; }
+    .state-item b { display: block; font-size: 11px; }
+    .state-item span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; line-height: 1.3; }
+    .state-item.active { border-style: solid; border-color: #5db7aa; background: var(--teal-soft); }
+    .state-item.wait { border-color: #dfaa59; background: var(--orange-soft); }
+    .state-item.fail { border-color: #d797a0; background: var(--red-soft); }
+    .state-arrow { color: #97a6ba; font-size: 18px; font-weight: 800; }
+    .hitl-card { position: absolute; top: 26px; width: 235px; min-height: 68px; padding: 11px 13px 10px 38px; border: 1px solid #e3b25d; border-radius: 8px; background: var(--orange-soft); }
+    .hitl-card::before { content: "H"; position: absolute; left: 12px; top: 13px; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #d99120; color: #fff; font-size: 10px; font-weight: 900; }
+    .hitl-card b { display: block; font-size: 11px; }
+    .hitl-card span { display: block; margin-top: 4px; color: #79521e; font-size: 10px; line-height: 1.35; }
+    .hitl-install { left: 246px; }
+    .hitl-exec { left: 766px; }
+    .hitl-sensitive { left: 1046px; }
+    .cap-grid, .data-grid { position: absolute; top: 24px; left: 0; right: 0; display: flex; gap: 12px; }
+    .cap-card { width: 174px; min-height: 80px; padding: 11px 12px; border: 1px solid #8dcec4; border-radius: 8px; background: var(--teal-soft); }
+    .cap-card b { display: block; font-size: 11px; }
+    .cap-card span { display: block; margin-top: 5px; color: #336e67; font-size: 10px; line-height: 1.36; }
+    .cap-card.tool { border-color: #ac9bdf; background: var(--violet-soft); }
+    .cap-card.tool span { color: #5e4e9a; }
+    .data-card { width: 174px; min-height: 68px; padding: 10px 12px; border-left: 3px solid var(--violet); background: #faf9ff; }
+    .data-card b { display: block; font-size: 11px; }
+    .data-card span { display: block; margin-top: 4px; color: #62577f; font-size: 10px; line-height: 1.35; }
+    .callout { position: absolute; z-index: 4; border-radius: 7px; padding: 8px 10px; font-size: 10px; line-height: 1.35; box-shadow: 0 4px 11px rgba(35,57,87,.08); }
+    .callout strong { font-size: 10px; }
+    .callout.inventory-note { left: 384px; top: 253px; width: 243px; color: #286b63; background: #eefaf7; border: 1px solid #b3dfd6; }
+    .callout.gap-note { left: 764px; top: 266px; width: 253px; color: #845a1c; background: #fff7e9; border: 1px solid #efd19a; }
+    .callout.qa-note { left: 1148px; top: 265px; width: 203px; color: #813c45; background: #fff4f4; border: 1px solid #e7bec2; }
+    .footnotes { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 13px; margin-top: 16px; }
+    .foot { min-height: 108px; padding: 15px 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .foot h3 { margin: 0 0 8px; font-size: 12px; }
+    .foot p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .foot b { color: var(--ink); }
+    .scroll-hint { color: var(--muted); font-size: 11px; text-align: right; margin: 7px 3px 0; }
+    @media (max-width: 820px) { body { padding: 18px 14px 35px; } header { display: block; } .outcome { margin-top: 15px; } .footnotes { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <div class="eyebrow">AGENTFIT / PRODUCT MAP / V1</div>
+        <h1>让 Agent 真正完成一次企业竞品调研</h1>
+        <p class="lede">以“Claude Code 没有网页检索能力，但企业用户要调研竞品”为例，AgentFit 先核实宿主当前能力，再只补齐缺口，经过人类确认后交给宿主执行，并用质量门禁把结果闭环。</p>
+      </div>
+      <div class="outcome"><strong>产品承诺</strong><span>用户只说想完成什么工作；AgentFit 找到最小可用能力路径，让宿主 Agent 执行，并检查交付物是否真的可用。</span></div>
+    </header>
+
+    <div class="legend" aria-label="图例">
+      <span class="legend-title">阅读图例</span><span class="legend-item"><i class="swatch role"></i>角色 / 责任主体</span><span class="legend-item"><i class="swatch step"></i>用户主流程</span><span class="legend-item"><i class="swatch hitl"></i>HITL 人类确认</span><span class="legend-item"><i class="swatch cap"></i>能力底座</span><span class="legend-item"><i class="swatch data"></i>数据对象</span><span class="legend-item"><i class="swatch gate"></i>质量门禁 / 失败回流</span>
+    </div>
+
+    <div class="map-frame">
+      <section class="map" aria-label="AgentFit 横向产品全景框架">
+        <div class="map-title">横向产品全景框架：企业竞品调研从一句话到可采纳结论</div>
+        <div class="map-caption">横向滚动查看完整链路 · 实线是主流程 · 虚线是状态与数据回流</div>
+
+        <div class="band role"><label>角色<br>WHO</label><div class="band-content">
+          <div class="role-chip user"><b>企业业务用户</b><small>提出“调研竞品”目标</small></div>
+          <div class="role-chip owner"><b>业务负责人 / 审批人</b><small>确认安装、执行与敏感动作</small></div>
+          <div class="role-chip agent"><b>宿主 Agent（如 Claude Code）</b><small>调用工具、收集证据、制作交付物</small></div>
+          <div class="role-chip fit"><b>AgentFit</b><small>路由能力、卡住风险、验收结果</small></div>
+        </div></div>
+
+        <div class="band flow"><label>用户主流程<br>FLOW</label><div class="band-content">
+          <svg class="arrows" viewBox="0 0 1410 300" preserveAspectRatio="none" aria-hidden="true">
+            <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7e91aa"/></marker><marker id="orangeArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c5801d"/></marker><marker id="redArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#bd5963"/></marker></defs>
+            <path d="M166 102 H183" stroke="#7e91aa" stroke-width="2" fill="none" marker-end="url(#arrow)"/><path d="M351 102 H367" stroke="#7e91aa" stroke-width="2" fill="none" marker-end="url(#arrow)"/><path d="M542 102 H559" stroke="#5ba99f" stroke-width="2" fill="none" marker-end="url(#arrow)"/><path d="M734 102 H751" stroke="#c5801d" stroke-width="2" fill="none" marker-end="url(#orangeArrow)"/><path d="M932 102 H949" stroke="#7e91aa" stroke-width="2" fill="none" marker-end="url(#arrow)"/><path d="M1117 102 H1138" stroke="#bd5963" stroke-width="2" fill="none" marker-end="url(#redArrow)"/><path d="M1307 102 H1322" stroke="#7e91aa" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+            <path d="M841 154 C841 223 683 245 683 282" stroke="#c5801d" stroke-dasharray="5 5" stroke-width="1.5" fill="none" marker-end="url(#orangeArrow)"/><path d="M1223 148 C1223 213 1055 246 1055 284" stroke="#bd5963" stroke-dasharray="5 5" stroke-width="1.5" fill="none" marker-end="url(#redArrow)"/>
+          </svg>
+          <article class="node input"><span class="num">1</span><span class="txt">说出业务目标</span><p>“比较 A/B/C 竞品，给管理层一份有来源的结论。”</p><span class="pill">自然语言请求</span></article>
+          <article class="node infer"><span class="num">2</span><span class="txt">拆解结果与标准</span><p>交付物、受众、时效、公开来源、语言、数据边界。</p><span class="pill">outcome spec</span></article>
+          <article class="node inventory"><span class="num">3</span><span class="txt">盘点宿主能力</span><p>读取当前会话实际暴露的 MCP / Skill / tool / plugin。</p><span class="pill">mode: verified</span></article>
+          <article class="node match"><span class="num">4</span><span class="txt">匹配最小工作流</span><p>优先复用已接受工作流，其次是已安装能力，再到宿主原生能力。</p><span class="pill">reuse → host</span></article>
+          <article class="node gap"><span class="num">5</span><span class="txt">只发现真实缺口</span><p>例如缺少 research-with-citations；候选仅做只读审核，不自动安装。</p><span class="pill">gap-only discovery</span></article>
+          <article class="node exec"><span class="num">6</span><span class="txt">宿主 Agent 执行</span><p>检索公开网页、整理证据、交叉核验、输出竞品研究报告。</p><span class="pill">host owns tools</span></article>
+          <article class="node qa"><span class="num">7</span><span class="txt">质量门禁</span><p>来源可追溯、结论有证据、结构适合受众、文件可访问。</p><span class="pill">最多 2 次修订</span></article>
+          <article class="node learn"><span class="num">8</span><span class="txt">沉淀与复用</span><p>用户接受后记录抽象工作模式；下次更快命中，不保存原始任务。</p><span class="pill">accepted workflow</span></article>
+          <div class="callout inventory-note"><strong>关键防错</strong><br>inventory=unknown / partial 时，不能把“没看见”当成“没有”，先要求宿主补全能力盘点。</div>
+          <div class="callout gap-note"><strong>真实缺口示例</strong><br>Claude Code 没有网页检索：只为 research-with-citations 搜索候选，不顺手安装一堆工具。</div>
+          <div class="callout qa-note"><strong>失败回流</strong><br>质量不通过 → 回宿主 Agent 修订；超过上限则交给用户决策。</div>
+        </div></div>
+
+        <div class="band state"><label>状态流转<br>STATE</label><div class="band-content"><div class="state-track">
+          <div class="state-item"><b>captured</b><span>已理解目标</span></div><span class="state-arrow">→</span><div class="state-item active"><b>inventory-verified</b><span>已验证宿主当前能力</span></div><span class="state-arrow">→</span><div class="state-item wait"><b>needs-discovery</b><span>只存在真实缺口</span></div><span class="state-arrow">→</span><div class="state-item wait"><b>awaiting-install</b><span>等待安装确认</span></div><span class="state-arrow">→</span><div class="state-item wait"><b>awaiting-execution</b><span>等待正式执行确认</span></div><span class="state-arrow">→</span><div class="state-item active"><b>executing</b><span>宿主 Agent 工作中</span></div><span class="state-arrow">→</span><div class="state-item fail"><b>needs-revision</b><span>质量失败，回流修订</span></div><span class="state-arrow">→</span><div class="state-item active"><b>accepted</b><span>通过并可复用</span></div>
+        </div></div></div>
+
+        <div class="band human"><label>HITL 节点<br>人类在环</label><div class="band-content">
+          <div class="hitl-card hitl-install"><b>安装确认</b><span>展示来源、版本、权限、脚本、文件与卸载方式；用户明确同意后才安装。</span></div>
+          <div class="hitl-card hitl-exec"><b>执行确认</b><span>确认开始外部检索、写入文件或正式制作报告；拆解和只读发现不代替此确认。</span></div>
+          <div class="hitl-card hitl-sensitive"><b>敏感动作确认</b><span>即使组件已安装，付费服务、外部账号、敏感数据与高风险写入仍需临时确认。</span></div>
+        </div></div>
+
+        <div class="band cap"><label>能力与工具<br>CAPABILITY</label><div class="band-content"><div class="cap-grid">
+          <div class="cap-card"><b>Task routing</b><span>识别交付物、受众、时效、来源与数据边界。</span></div>
+          <div class="cap-card"><b>Host inventory</b><span>只认当前会话真实暴露的能力；支持 verified / partial / unknown。</span></div>
+          <div class="cap-card"><b>Capability matching</b><span>按交付物、深度、时效、来源、运行时与最小性排序。</span></div>
+          <div class="cap-card tool"><b>External discovery</b><span>GitHub / 宿主原生搜索；只查 gap，不把候选当成已安装。</span></div>
+          <div class="cap-card tool"><b>Install contract</b><span>待审批记录 + 清单校验 + checksum 分阶段安装。</span></div>
+          <div class="cap-card"><b>Quality gate</b><span>证据、来源、结构、可访问性；失败最多自动修订两次。</span></div>
+          <div class="cap-card"><b>Learning</b><span>只存抽象标签与已接受工作流，可查看、可删除。</span></div>
+        </div></div></div>
+
+        <div class="band data"><label>数据流转<br>DATA</label><div class="band-content"><div class="data-grid">
+          <div class="data-card"><b>需求规格</b><span>deliverable · audience · freshness · source · data scope</span></div>
+          <div class="data-card"><b>能力清单</b><span>component id · type · enabled · permissions · host platform</span></div>
+          <div class="data-card"><b>工作流计划</b><span>ordered steps · assignments · discovery gaps · execution gate</span></div>
+          <div class="data-card"><b>研究证据包</b><span>URL · retrieved date · claim · counter-evidence · confidence</span></div>
+          <div class="data-card"><b>质量证据</b><span>criterion results · revision actions · attempt count</span></div>
+          <div class="data-card"><b>学习记录</b><span>controlled labels · opaque scope · accepted components；无原始任务文本</span></div>
+        </div></div></div>
+      </section>
+    </div>
+    <div class="scroll-hint">← 横向滚动查看角色、流程、状态、能力和数据的完整关系 →</div>
+
+    <section class="footnotes">
+      <div class="foot"><h3>上下游交互</h3><p><b>上游：</b>企业用户、业务负责人、宿主 Agent 会话。<br><b>下游：</b>网页 / GitHub 只读发现、MCP / Skill / plugin 安装边界、报告或 PPT 生成器、宿主文件系统。AgentFit 不替宿主调用工具，负责把能力路径和风险讲清楚。</p></div>
+      <div class="foot"><h3>为什么解决企业痛点</h3><p>新人不需要先懂 MCP。AgentFit 把“我想做竞品调研”变成可解释的最小路径：先核实 Claude Code 到底有什么，再只补网页检索缺口，并在安装和执行前给人一个可控的决定点。</p></div>
+      <div class="foot"><h3>边界与信任</h3><p>候选不是已安装能力；文件存在也不等于启用。未知 inventory 不触发盲搜。学习只记录抽象工作模式，质量门禁通过且用户接受后才提升复用优先级。</p></div>
+    </section>
+  </main>
+</body>
+</html>

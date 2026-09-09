@@ -15,6 +15,7 @@ import {
   MemoryStore,
   createDailyScheduleHandoff
 } from './index.mjs';
+import { hostInventoryStatus, inventoryCollectionPrompt, normalizeHostInventory } from './host-inventory.mjs';
 import { runDailySkillResearch } from './daily-research.mjs';
 import { workBuddySearchHandoff, normalizeTaskBrief } from './policy.mjs';
 
@@ -118,11 +119,18 @@ async function commandRunner() {
         ? await learningStore.context({ hostPlatform: brief.hostPlatform })
         : null;
       const inventoryDocument = await jsonFromFile(options.inventoryFile, 'inventoryFile');
+      const inventoryMode = inventoryDocument == null
+        ? 'unknown'
+        : Array.isArray(inventoryDocument) ? 'verified' : inventoryDocument.mode ?? 'verified';
       const recommendation = createSkillPlan({
         ...brief,
         memoryEntries,
         learningContext,
-        installedComponents: Array.isArray(inventoryDocument) ? inventoryDocument : inventoryDocument?.components ?? []
+        installedComponents: Array.isArray(inventoryDocument) ? inventoryDocument : inventoryDocument?.components ?? [],
+        inventoryDocument: Array.isArray(inventoryDocument)
+          ? { hostPlatform: brief.hostPlatform, source: 'user-supplied', mode: 'verified', components: inventoryDocument }
+          : inventoryDocument,
+        inventoryMode
       });
       const learning = learningStore && asBoolean(options.autoLearn) && recommendation.status === 'recommended'
         ? await learningStore.observe({ brief, plan: recommendation.plan, autoStart: true })
@@ -145,7 +153,14 @@ async function commandRunner() {
           try {
             const scout = new GitHubScout();
             const plannedQueries = recommendation.plan.githubResearch?.queriesByStep ?? [];
-            if (plannedQueries.length === 0) {
+            if (recommendation.plan.hostInventory?.verified === false) {
+              discovery = {
+                status: 'inventory-required',
+                reason: recommendation.plan.hostInventory.reason,
+                nextAction: recommendation.plan.hostInventory.nextAction,
+                collection: inventoryCollectionPrompt(brief.hostPlatform)
+              };
+            } else if (plannedQueries.length === 0) {
               discovery = {
                 status: 'not-needed',
                 source: 'installed-capability-inventory',
@@ -239,6 +254,16 @@ async function commandRunner() {
       const response = { ...recommendation, learning, discovery };
       await saveJsonFile(options.stateFile, response);
       output(response);
+      return;
+    }
+    case 'inventory-check': {
+      const inventoryDocument = await jsonFromFile(options.inventoryFile, 'inventoryFile');
+      const status = inventoryDocument == null
+        ? hostInventoryStatus(null, { hostPlatform: options.host })
+        : hostInventoryStatus(Array.isArray(inventoryDocument)
+          ? { hostPlatform: options.host, source: 'user-supplied', mode: 'verified', components: inventoryDocument }
+          : inventoryDocument, { hostPlatform: options.host });
+      output({ ...status, collection: status.verified ? null : inventoryCollectionPrompt(options.host) });
       return;
     }
     case 'quality-check': {

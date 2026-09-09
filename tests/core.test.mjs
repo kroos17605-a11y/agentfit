@@ -15,7 +15,10 @@ import {
   InstallApprovalStore,
   LearningStore,
   MemoryStore,
-  createDailyScheduleHandoff
+  createDailyScheduleHandoff,
+  hostInventoryStatus,
+  inventoryCollectionPrompt,
+  normalizeHostInventory
 } from '../src/index.mjs';
 import { runDailySkillResearch } from '../src/daily-research.mjs';
 import { normalizeTaskBrief } from '../src/policy.mjs';
@@ -66,6 +69,39 @@ function gitHubMock({ installationMentioned = true, includeSkill = true, failRea
     return new Response(JSON.stringify({ message: 'Not found' }), { status: 404 });
   };
 }
+
+test('host inventory distinguishes an unverifiable session from a verified empty capability set', () => {
+  const unknown = hostInventoryStatus(null, { hostPlatform: 'claude-code' });
+  assert.equal(unknown.status, 'unknown');
+  assert.match(unknown.reason, /不能据此判断/u);
+
+  const verified = hostInventoryStatus({
+    hostPlatform: 'claude-code', source: 'host-runtime', mode: 'verified', observedAt: '2026-09-08T00:00:00Z', components: []
+  });
+  assert.equal(verified.status, 'verified');
+  assert.deepEqual(verified.inventory.capabilityIds, []);
+
+  const prompt = inventoryCollectionPrompt('claude-code');
+  assert.deepEqual(prompt.requiredFields, ['id', 'name', 'type', 'enabled', 'capabilityIds', 'hostPlatforms']);
+  assert.match(prompt.instruction, /当前会话/u);
+});
+
+test('an unknown Claude Code inventory blocks gap discovery instead of claiming no crawler exists', () => {
+  const result = createSkillPlan({
+    hostPlatform: 'claude-code',
+    task: '调研竞品最新动态并输出决策报告',
+    allowWeb: true,
+    inventoryDocument: { hostPlatform: 'claude-code', source: 'host-adapter', mode: 'unknown', components: [] },
+    installedComponents: [],
+    inventoryMode: 'unknown'
+  });
+  assert.equal(result.plan.hostInventory.status, 'unknown');
+  assert.equal(result.plan.capabilityResolution.inventoryMode, 'unknown');
+  assert.equal(result.plan.capabilityResolution.assignments[0].status, 'capability-unknown');
+  assert.deepEqual(result.plan.capabilityResolution.discoveryCapabilityIds, []);
+  assert.equal(result.plan.githubResearch.queriesByStep.length, 0);
+  assert.match(result.plan.userFacing.executionGate.prompt, /盘点|清单/u);
+});
 
 function focusedVsBroadGitHubMock() {
   const repositories = [

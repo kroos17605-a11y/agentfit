@@ -23,6 +23,16 @@ The primary user is new to using AI Agents for office work. They can describe th
 
 The core problem is not a lack of tools. It is the gap between a natural-language work request and a result that meets the user's real acceptance criteria.
 
+### 2.1 User layers and first paid use case
+
+AgentFit is designed around three user layers:
+
+- **Business requester**: knows the decision or deliverable needed, but should not have to understand MCP, Skill, plugin, or host-specific setup.
+- **Team lead / AI champion**: wants repeatable workflows, visible permission boundaries, and evidence that a result can be trusted before rolling it out.
+- **Platform / IT owner**: needs a verifiable inventory of what the host actually exposes, controlled installation, audit-friendly approvals, and privacy-preserving learning.
+
+The first paid use case is public competitive research: a new enterprise user asks the main Agent to compare competitors and produce a decision-ready brief. The product must make the difference between “the host has no web research capability” and “the host did not expose an inventory” explicit. `unknown` is a stop-and-collect-evidence state, not a negative capability claim. This use case is narrow enough to pilot and broad enough to prove routing, HITL, evidence quality, and reuse.
+
 ## 3. Product promise
 
 > Say what work you want. AgentFit finds the smallest usable capability path, lets the host Agent execute it, and checks the result.
@@ -124,6 +134,21 @@ The host adapter supplies only components actually exposed in the current runtim
 }
 ```
 
+The envelope around this list is part of the contract:
+
+```json
+{
+  "version": 1,
+  "hostPlatform": "claude-code",
+  "source": "host-runtime",
+  "mode": "verified",
+  "observedAt": "2026-09-08T00:00:00Z",
+  "components": []
+}
+```
+
+`mode: verified` means the host inspected the current session, including an intentionally empty result. `partial` and `unknown` mean AgentFit cannot tell whether an unlisted MCP or tool is available. Unknown inventory is never treated as a negative capability assertion: it blocks gap-only discovery and asks the host to complete the session inventory first. This prevents a new Claude Code user from being told that web crawling is unavailable merely because the adapter failed to inspect the main Agent's tools.
+
 Filesystem presence alone does not prove that a component is enabled. When the host cannot verify availability, AgentFit must classify it as unknown instead of silently routing work to it.
 
 ## 7. Matching policy
@@ -186,6 +211,12 @@ AgentFit owns task interpretation, capability matching, workflow order, installa
 
 The host Agent owns tool invocation and artifact production. Installing a component transfers execution to the host, but it does not end the AgentFit lifecycle. AgentFit resumes for final evaluation.
 
+## 10.1 Presentation and product acceptance artifacts
+
+The project maintains a self-contained HTML delivery set for product review. The positioning page is written for a buyer rather than an internal engineering audience; the product map shows roles, mainline flow, state transitions, HITL nodes, capability/tool layers, and data movement; the existing demo is the interactive prototype; and the evaluation page defines endpoint and sub-capability rubrics, golden and adversarial benchmark sets, and the split between deterministic code checks, semantic judge checks, and human review. These artifacts are linked from `output/index.html` and should be reviewed together because no single artifact proves product value on its own.
+
+The benchmark catalog is executable and reviewable: `evals/agentfit-benchmark-cases.mjs` contains six golden cases and eight adversarial/boundary cases with fixed briefs, inventory evidence, expected states, rubrics, and evaluator owners. `npm run eval:cases` runs deterministic assertions and explicitly labels cases that still require Judge or human review instead of treating them as automated passes.
+
 ## 11. Success metrics
 
 Primary product metrics require recorded user testing:
@@ -217,6 +248,8 @@ Offline routing accuracy and unit-test pass rate are engineering signals, not pr
 - Claude Code runtime capability enumeration;
 - WorkBuddy native Skill and tool inventory handoff;
 - permission and enabled-state verification.
+
+The adapter must emit the inventory envelope from the current session rather than infer availability from files on disk. `inventory-check` is the diagnostic fallback when a host cannot enumerate its live tools.
 
 ### P2: Better outcome understanding
 

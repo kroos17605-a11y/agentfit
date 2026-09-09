@@ -1,5 +1,6 @@
 export { CAPABILITY_CARDS, CATALOG_VERSION, getCard } from './catalog.mjs';
 export { CapabilityInventoryError, normalizeCapabilityInventory, normalizeInstalledComponent, resolveCapabilityPlan } from './capability.mjs';
+export { HOST_INVENTORY_VERSION, HostInventoryError, hostInventoryStatus, inventoryCollectionPrompt, normalizeHostInventory } from './host-inventory.mjs';
 export { GitHubScout, GitHubResearchError, GITHUB_TOKEN_SETUP, buildGitHubRepositoryQuery } from './github.mjs';
 export { runDailySkillResearch } from './daily-research.mjs';
 export { createInstallRequest, executeVerifiedFilesystemInstall, InstallApprovalStore, InstallContractError } from './install.mjs';

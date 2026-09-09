@@ -10,8 +10,8 @@ AgentFit 是 WorkBuddy 主 Agent 内嵌的能力路由与质量控制层，不�
 ## 核心流程
 
 1. 推断交付物、受众、研究深度、时效、来源类型、运行环境、数据敏感度和合理默认值。只有缺失信息会实质改变结果时才提问。
-2. 在外部搜索前，逐项盘点当前 WorkBuddy 会话中实际暴露且已启用的 Skill、MCP、工具、插件和扩展。先扫描全部元数据，再完整读取每个可能匹配组件的 `SKILL.md` 或官方说明后才能断言适配；不得为了检查而调用不相关 Skill。磁盘中存在文件不等于可用。`.agentfit/inventory.json` 优先写入 `id`、`name`、`type`、`enabled`、`capabilityIds` 和 `hostPlatforms`；也兼容 `kind`／`status: available`，但应尽量明确能力 ID。不得写入凭证或任务内容。
-3. 运行 `node <this-skill-folder>/scripts/cli.mjs recommend --host workbuddy --task "..." --project "..." --inventory-file .agentfit/inventory.json --learning-store .agentfit/learning.json --auto-learn --allow-web true --state-file .agentfit/plan.json`。仅在用户或宿主明确禁止联网时使用 `--allow-web false`。
+2. 在外部搜索前，逐项盘点当前 WorkBuddy 会话中实际暴露且已启用的 Skill、MCP、工具、插件和扩展。先扫描全部元数据，再完整读取每个可能匹配组件的 `SKILL.md` 或官方说明后才能断言适配；不得为了检查而调用不相关 Skill。磁盘中存在文件不等于可用。`.agentfit/inventory.json` 写入 `hostPlatform`、`source`、`mode: "verified"`、`observedAt` 和 `components`，其中包含 `id`、`name`、`type`、`enabled`、`capabilityIds` 和 `hostPlatforms`；也兼容 `kind`／`status: available`，但应尽量明确能力 ID。不得写入凭证或任务内容。若宿主无法枚举当前会话，运行 `inventory-check` 并停下；未知不等于没有 MCP。
+3. 运行 `node <this-skill-folder>/scripts/cli.mjs recommend --host workbuddy --task "..." --project "..." --inventory-file .agentfit/inventory.json --learning-store .agentfit/learning.json --auto-learn --allow-web true --state-file .agentfit/plan.json`。仅在用户或宿主明确禁止联网时使用 `--allow-web false`。只有已验证 inventory 显示真实能力缺口时才进行外部搜索。
 4. 用普通办公语言说明预期结果和最短工作流，并展示 `plan.userFacing.capabilityResolution.inventoryReview`：逐项说明检查了哪些现有能力、能做什么、是否匹配以及原因。
 5. 如果 `plan.githubResearch.queriesByStep` 为空，不搜索 GitHub。展示有序分工后询问 `plan.userFacing.executionGate.prompt`；用户明确确认前，不得开始调研、写作、PPT、表格或其他正式交付物。
 6. 如果存在缺口，运行同一命令并加入 `--discover --confirm-discovery true`，且只搜索缺口；同时生成 WorkBuddy 原生“查找 Skill”请求。每个缺口展示一个首选和至多一个备选，说明特点、优点、限制与链接。严格执行 `discovery.nextDecision`：安装前询问；无候选可审核时明确说明“不建议安装”，再询问是否改用 WorkBuddy 当前能力。详情证据失败但仓库有潜力时，先用已有只读浏览能力查看首选 README。绝不能把“没有合格候选”当成自动执行许可。

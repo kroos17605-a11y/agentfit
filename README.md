@@ -2,6 +2,18 @@
 
 AgentFit is an **embedded capability-routing and quality-control layer**, not a standalone chat product or another marketplace. A user simply says what work they want to do. AgentFit turns that request into an outcome specification, reuses suitable capabilities already available in the host, discovers only missing capabilities, hands ordered execution to the host Agent, and checks the final artifact.
 
+## Product delivery set
+
+The project now includes a user-facing presentation path for the enterprise adoption problem that motivates the implementation:
+
+- [`output/index.html`](output/index.html): one entry point for the four deliverables;
+- [`output/product-positioning.html`](output/product-positioning.html): buyer-facing positioning, user segmentation assumptions, the competitive-research scenario, value, and boundaries;
+- [`output/product-map.html`](output/product-map.html): the product-wide role, workflow, state, HITL, capability, tool, and data-flow view;
+- [`demo/agentfit-product-demo.html`](demo/agentfit-product-demo.html): the interactive prototype, kept as the primary demo rather than a parallel mockup;
+- [`output/AgentFit_评测方案.html`](output/AgentFit_评测方案.html): end-to-end and sub-capability evaluation, rubrics, benchmark sets, and code/Judge/human responsibilities.
+
+Recommended presentation order: explain why a new enterprise user would buy AgentFit, show how the system operates, run the existing interactive prototype, then close with how reliability is measured.
+
 The current product contract is documented in [docs/AgentFit_PRD.md](docs/AgentFit_PRD.md).
 
 ## What runs locally
@@ -54,6 +66,7 @@ npm run recommend -- --host codex --task "整理公开 CSV 并输出周报" --le
 # Optional: enable periodic external catalog research separately.
 node src/cli.mjs learning-enable --host codex --learning-store .agentfit/learning.json --confirm-enable --daily-research true
 node src/cli.mjs recommend --host codex --project product-docs --task "处理产品文档" --inventory-file .agentfit/inventory.json --learning-store .agentfit/learning.json --auto-learn
+node src/cli.mjs inventory-check --host claude-code --inventory-file .agentfit/inventory.json
 node src/cli.mjs quality-check --plan .agentfit/plan.json --evidence .agentfit/quality-evidence.json
 node src/cli.mjs workflow-outcome --host codex --plan .agentfit/plan.json --quality-result .agentfit/quality-result.json --learning-store .agentfit/learning.json
 node src/cli.mjs daily-research --host codex --learning-store .agentfit/learning.json
@@ -61,6 +74,8 @@ node src/cli.mjs daily-schedule-handoff --host codex --frequency weekly --local-
 ```
 
 AgentFit is an online discovery layer by default. The host creates the plan, then runs `--discover --confirm-discovery true` automatically; the CLI still requires that explicit internal confirmation so discovery cannot happen accidentally outside the host flow. A task that explicitly prohibits networking must pass `--allow-web false`, in which case AgentFit returns the workflow only and clearly marks discovery as deferred. The approved daily job additionally permits a once-per-local-day, generic-capability query. It reads repository metadata, README, Skill/MCP/plugin manifests when available, license evidence, release evidence, and script/permission signals; it never downloads or runs candidate code. It suppresses candidates already seen in earlier daily runs. Installation is separate and explicit; after confirmed installation, the host's main Agent executes the original task.
+
+宿主能力盤點是搜尋前的必要前置條件。`.agentfit/inventory.json` 的 `mode` 可為 `verified`、`partial` 或 `unknown`：`verified` 表示清單來自當前會話實際暴露的能力，空清單也代表「已驗證沒有」；`partial`/`unknown` 則代表 AgentFit 不知道主 Agent 是否有瀏覽器、抓取或其他 MCP，不會把未知誤報為能力缺口，也不會直接搜尋。此時 `inventory-check` 會返回宿主需要補充的欄位與隱私限制。只有拿到 `verified` inventory 後，AgentFit 才對真正缺失的 `research-with-citations` 等能力執行 gap-only discovery。
 
 AgentFit first identifies the final deliverable, required research depth, freshness, source types, and host runtime. It then separates workflow stages from component searches. For example, `制作一份关于机器人行业最新发展的 PPT` becomes `research → host-agent evidence synthesis → editable PPTX production`, but GitHub discovery runs only for unresolved research and PPT-production stages. Common host inventory aliases such as `kind`/`status: available` are normalized; conservative identity mappings let an exposed browser cover public research and an image generator cover visual design while leaving unsupported PPTX production as an explicit gap. The host Agent handles ordinary synthesis and analysis unless that step has a concrete requirement beyond the host's capability.
 
@@ -96,6 +111,7 @@ The deterministic recommendation benchmark is also runnable on its own. It repor
 
 ```sh
 npm run eval:offline
+npm run eval:cases
 ```
 
 产品级离线评估使用真实办公场景检查 AgentFit 是否覆盖前置知识获取、交付物制作、记忆个性化、步骤契约和执行闸门：
@@ -103,6 +119,8 @@ npm run eval:offline
 ```sh
 npm run eval:product
 ```
+
+可执行的产品 Benchmark case catalog 位于 [`evals/agentfit-benchmark-cases.mjs`](evals/agentfit-benchmark-cases.mjs)，当前包含 6 个黄金基准和 8 个对抗/边界 case。`npm run eval:cases` 会自动断言 10 个确定性 case，并把需要 Judge 或人工判断的 4 个 case 明确标记为 `manual-review-required`，不会把未自动化的语义判断误报成通过。
 
 该评估仍是可重复的离线代理指标；GitHub 候选质量需要另行进行在线抽样评审，不能仅凭固定测试得分推断。
 

@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { CAPABILITY_CARDS, CATALOG_VERSION, GITHUB_DISCOVERY_TERMS } from './catalog.mjs';
 import { resolveCapabilityPlan } from './capability.mjs';
+import { hostInventoryStatus } from './host-inventory.mjs';
 import { createQualityGate } from './quality.mjs';
 import {
   normalizeTaskBrief,
@@ -365,7 +366,7 @@ function userFacingCard(card, { role, step, primary, brief }) {
   };
 }
 
-function userFacingPlan({ primary, support, brief, webPermissionNeeded, breakdown, capabilityResolution, qualityGate }) {
+function userFacingPlan({ primary, support, brief, webPermissionNeeded, breakdown, capabilityResolution, qualityGate, inventoryStatus }) {
   const selected = [primary, ...support];
   return {
     title: '推薦的 Skill 工作流',
@@ -382,6 +383,9 @@ function userFacingPlan({ primary, support, brief, webPermissionNeeded, breakdow
     taskBreakdown: breakdown,
     capabilityResolution: {
       inventoryCount: capabilityResolution.inventoryCount,
+      inventoryMode: capabilityResolution.inventoryMode,
+      inventoryStatus: inventoryStatus.status,
+      inventoryReason: inventoryStatus.reason,
       policy: capabilityResolution.policy,
       inventoryReview: capabilityResolution.inventoryReview,
       assignments: capabilityResolution.assignments.map((assignment) => ({
@@ -395,10 +399,12 @@ function userFacingPlan({ primary, support, brief, webPermissionNeeded, breakdow
     },
     workflowValue: '先完成並審閱前一步，再把已確認的輸出交給下一步；這能避免把未核實的內容包裝成報告、簡報或對外溝通。',
     installationBoundary: '推薦的是能力與工作流，不等於已找到或已安裝外部 Skill。任何候選都需先展示來源、版本、權限、腳本與卸載方式，再由你確認。',
-    executionGate: {
+      executionGate: {
       status: capabilityResolution.readyForHostExecution ? 'user-confirmation-required' : 'capability-decision-required',
-      prompt: capabilityResolution.readyForHostExecution
+      prompt: inventoryStatus.verified && capabilityResolution.readyForHostExecution
         ? '现有能力已经覆盖工作流。是否按以上步骤开始正式执行任务？'
+        : !inventoryStatus.verified
+          ? inventoryStatus.nextAction
         : '仍有能力缺口。请先选择安装推荐候选，或明确同意使用主 Agent 的备用流程；确认前不会开始制作正式交付物。',
       rule: '任务拆解、能力盘点和只读候选发现可以自动进行；生成报告、PPT、表格或其他正式交付物前必须等待用户明确确认。'
     },
@@ -487,11 +493,19 @@ export function createSkillPlan(input) {
   const preferences = preferenceProfile(applicableMemory, input.learningContext);
   const { primary, support } = selectCards(brief, preferences);
   const breakdown = taskBreakdown(brief, primary, support);
+  const legacyInventory = input.inventoryDocument === undefined && input.inventoryMode === undefined && input.installedComponents === undefined;
+  const inventoryStatus = legacyInventory
+    ? { status: 'verified', verified: true, reason: '使用 API 兼容模式：调用方未声明宿主 inventory 状态。', nextAction: '可根据传入的组件数组进行能力匹配。' }
+    : hostInventoryStatus(input.inventoryDocument ?? { hostPlatform: brief.hostPlatform, mode: input.inventoryMode ?? 'verified', components: input.installedComponents ?? [] }, { hostPlatform: brief.hostPlatform });
+  const inventoryComponents = input.installedComponents
+    ?? input.inventoryDocument?.components
+    ?? [];
   const capabilityResolution = resolveCapabilityPlan({
     steps: breakdown.decomposition,
-    inventory: input.installedComponents ?? [],
+    inventory: inventoryComponents,
     successfulWorkflows: input.learningContext?.successfulWorkflows ?? [],
-    hostPlatform: brief.hostPlatform
+    hostPlatform: brief.hostPlatform,
+    inventoryMode: input.inventoryMode ?? (legacyInventory ? 'legacy' : inventoryStatus.verified ? 'verified' : inventoryStatus.status)
   });
   for (const step of breakdown.decomposition) {
     const assignment = capabilityResolution.assignments.find((item) => item.stepOrder === step.order);
@@ -523,7 +537,7 @@ export function createSkillPlan(input) {
       hostPlatform: brief.hostPlatform,
       primarySkill: primary,
       supportingSkills: support,
-      userFacing: userFacingPlan({ primary, support, brief, webPermissionNeeded, breakdown, capabilityResolution, qualityGate }),
+      userFacing: userFacingPlan({ primary, support, brief, webPermissionNeeded, breakdown, capabilityResolution, qualityGate, inventoryStatus }),
       steps: stepsFor(primary, support),
       reasons: [
         `${primary.name} 与任务意图、交付物和安全约束匹配。`,
@@ -535,6 +549,7 @@ export function createSkillPlan(input) {
           : [])
       ],
       capabilityStatus: 'fixed-capability-template — 需通过平台目录或 GitHub 证据绑定为真实可安装 Skill。',
+      hostInventory: inventoryStatus,
       sourcePolicy: sources,
       workbuddySearchHandoff: workBuddySearchHandoff(brief, primary.name),
       githubResearch: githubResearchBrief(brief, primary, breakdown, capabilityResolution, matchedLearnedDomains, preferences.learnedAudience),

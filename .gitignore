@@ -4,6 +4,16 @@
 output/
 tmp/
 
+# User-facing product review artifacts
+!demo/
+!demo/**
+!output/
+output/*
+!output/index.html
+!output/product-positioning.html
+!output/product-map.html
+!output/AgentFit_评测方案.html
+
 # Node and Python environments
 node_modules/
 .venv/

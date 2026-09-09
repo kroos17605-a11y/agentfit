@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AgentFit 产品演示：让刚开始使用 AI 工具的人，也能完成复杂办公任务。">
+  <title>AgentFit | Product Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root{--ink:#0f172a;--muted:#64748b;--bg:#f8fafc;--panel:#fff;--line:#e2e8f0;--mint:#0f766e;--cyan:#0369a1;--amber:#b45309}
+    body{background:var(--bg);color:var(--ink)}.topbar{background:rgba(248,250,252,.9);border-color:var(--line);box-shadow:0 1px 3px rgba(15,23,42,.04)}.brand-mark,.core-mark{background:#0f766e;color:#fff}.topbar nav{color:#64748b}.top-action{border-color:#cbd5e1;color:#0f172a}.hero-panel,.demo-window,.memory-visual{background:#fff;border-color:#e2e8f0;box-shadow:0 18px 50px rgba(15,23,42,.08)}.problem,.recommendation,.architecture{background:#fff}.story-card{border-color:#e2e8f0;background:#fff!important}.story-card.bright{border-color:#99f6e4;background:#f0fdfa!important}.flow-node{border-color:#e2e8f0;color:#475569}.flow-node.active{border-color:#5eead4;color:#0f172a;background:#f0fdfa}.timeline{border-color:#cbd5e1}.timeline-item:before{background:#fff;border-color:#0f766e}.tag,.chips span{border-color:#bae6d8;color:#0f766e}.demo-heading,.recommend-row,.memory-note,.roadmap-card li{border-color:#e2e8f0}.score,.eyebrow,.step-no,.roadmap-top span{color:#0f766e}.rec-icon.research{background:#ccfbf1;color:#0f766e}.rec-icon.host{background:#e0f2fe;color:#0369a1}.rec-icon.slides{background:#fef3c7;color:#b45309}.covered{color:#b45309}.host-label{color:#0369a1}.host-card,.agentfit-core,.roadmap-card{background:#fff;border-color:#e2e8f0}.agentfit-core{border-color:#5eead4;background:#f0fdfa}.memory-node{border-color:#e2e8f0}.memory-node.highlight{border-color:#5eead4;background:#f0fdfa}.memory-node.highlight b,.memory-node.highlight span{color:#0f766e}.roadmap-card.done{border-color:#99f6e4}.roadmap-card.current{background:#f0fdfa;border-color:#5eead4}.closing{background:linear-gradient(110deg,#ecfdf5,#f0fdfa)}.closing h2{color:#0f172a}.detail-drawer{background:#fff;border-color:#5eead4;box-shadow:0 20px 70px rgba(15,23,42,.18)}.detail-drawer h2{color:#0f172a}.detail-drawer>p:not(.eyebrow){color:#475569}.drawer-close{color:#64748b}.drawer-meta span{border-color:#99f6e4;color:#0f766e}.approval button{border-color:#5eead4;color:#0f766e}.button.primary{background:#0f766e;color:#fff}.button.primary:hover{background:#115e59}.text-link{color:#334155}.mini-flow i{color:#64748b}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="AgentFit 首页"><span class="brand-mark">A</span> AgentFit</a>
+    <nav aria-label="页面导航">
+      <a href="#experience">体验</a><a href="#live-demo">控制台</a><a href="#architecture">架构</a><a href="#roadmap">路线图</a>
+    </nav>
+    <a class="top-action" href="#experience">开始演示 <span>↗</span></a>
+  </header>
+
+  <main id="top">
+    <section class="hero section-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">CAPABILITY ROUTING LAYER</p>
+        <h1>只说你要做什么，<em>AgentFit</em> 帮你找到怎么做。</h1>
+        <p class="hero-lede">为刚开始使用 AI Agent 的办公人群，把自然语言任务变成可执行、可解释、可检查的工作流。</p>
+        <div class="hero-actions"><a class="button primary" href="#experience">看一次真实任务</a><a class="text-link" href="#architecture">了解它如何工作 <span>↓</span></a></div>
+        <div class="trust-row"><span><b>3</b> 个宿主</span><span><b>1</b> 条闭环</span><span><b>0</b> 次盲目安装</span></div>
+      </div>
+      <div class="hero-panel panel-glow" aria-label="AgentFit 任务输入演示">
+        <div class="window-bar"><span></span><span></span><span></span><small>AgentFit / live task</small></div>
+        <div class="prompt-label">用户输入</div>
+        <div class="prompt">“帮我制作一份关于机器人行业最新发展的 PPT”<span class="cursor"></span></div>
+        <div class="status-line"><span class="pulse"></span> 正在识别交付物与工作步骤</div>
+        <div class="mini-flow"><div class="flow-node active"><small>01</small>研究公开资料</div><i>→</i><div class="flow-node"><small>02</small>整合与分析</div><i>→</i><div class="flow-node"><small>03</small>制作 PPT</div></div>
+      </div>
+    </section>
+
+    <section class="problem section-grid" id="experience">
+      <div class="section-intro"><p class="eyebrow">THE GAP</p><h2>用户懂业务，<br><span>工具生态正在变复杂。</span></h2><p>Skill、MCP、Tool、Plugin 持续增加。AgentFit 把目标、步骤和能力连接起来，让办公用户专注于结果。</p></div>
+      <div class="before-after"><div class="story-card muted"><div class="card-kicker">传统使用方式</div><h3>“我想做一份 PPT。”</h3><p>工具选择、研究顺序和格式质量都需要反复摸索。</p><div class="friction">选择路径 <strong>分散</strong></div><div class="friction">交付质量 <strong>波动</strong></div></div><div class="story-card bright"><div class="card-kicker">AgentFit 工作方式</div><h3>“我想做一份 PPT。”</h3><p>自动拆解任务，复用已有能力，再为能力缺口推荐组件。</p><div class="friction">用户输入 <strong>一句话</strong></div><div class="friction">验收标准 <strong>逐步明确</strong></div></div></div>
+    </section>
+
+    <section class="workflow section-grid">
+      <div class="section-intro"><p class="eyebrow">ONE TASK, FOUR MOVES</p><h2>从一句话到<br><span>可交付结果。</span></h2></div>
+      <div class="timeline">
+        <article class="timeline-item interactive" data-detail="identify"><div class="step-no">01</div><div><h3>识别任务</h3><p>提取交付物、研究深度、时效、来源类型、运行环境和数据敏感度。</p><span class="tag">outcome spec</span></div><span class="expand">+</span></article>
+        <article class="timeline-item interactive" data-detail="decompose"><div class="step-no">02</div><div><h3>拆解工作流</h3><p><b>Research</b> 获取证据，主 Agent <b>整合分析</b>，再完成 <b>PPT 制作</b>。</p><span class="tag">minimum path</span></div><span class="expand">+</span></article>
+        <article class="timeline-item interactive" data-detail="match"><div class="step-no">03</div><div><h3>匹配能力</h3><p>先盘点宿主已安装 Skill、MCP 和 Tool，再为能力缺口生成 GitHub 搜索词。</p><span class="tag">reuse first</span></div><span class="expand">+</span></article>
+        <article class="timeline-item interactive" data-detail="handoff"><div class="step-no">04</div><div><h3>交给主 Agent</h3><p>用户确认安装与执行后，由 Codex、Claude Code 或 WorkBuddy 按顺序完成并接受质量检查。</p><span class="tag">handoff + QA</span></div><span class="expand">+</span></article>
+      </div>
+    </section>
+
+    <section class="recommendation section-grid">
+      <div class="demo-window">
+        <div class="window-bar"><span></span><span></span><span></span><small>推荐方案 / robotics-ppt</small></div>
+        <div class="demo-window-body"><div class="demo-heading"><span class="success-dot"></span><div><p>已生成最小工作流</p><strong>机器人行业最新发展 PPT</strong></div><span class="score">匹配度 94</span></div>
+          <div class="recommend-row"><div class="number">01</div><div class="rec-icon research">R</div><div class="rec-main"><strong>附引用的公开调研</strong><p>拆解研究问题，检索公开来源并交叉核对关键结论。</p><div class="chips"><span>research</span><span>citations</span><span>web-search</span></div></div><span class="covered">GitHub 搜索</span></div>
+          <div class="recommend-row"><div class="number">02</div><div class="rec-icon host">AI</div><div class="rec-main"><strong>整合与分析资料</strong><p>合并资料、统一口径、提炼趋势，由当前主 Agent 完成。</p><div class="chips"><span class="soft">host-native</span></div></div><span class="covered host-label">主 Agent</span></div>
+          <div class="recommend-row"><div class="number">03</div><div class="rec-icon slides">P</div><div class="rec-main"><strong>可编辑 PPT 制作</strong><p>将已核验内容生成 PPTX、图表、引用和讲者提示。</p><div class="chips"><span>pptx</span><span>presentation</span></div></div><span class="covered">GitHub 搜索</span></div>
+          <div class="approval"><span>安装由用户确认后进行</span><button type="button" id="approvalButton">查看候选并确认 <span>→</span></button></div>
+        </div>
+      </div>
+      <div class="section-intro side-copy"><p class="eyebrow">EXPLAINABLE RECOMMENDATION</p><h2>每个推荐，<br><span>都说清楚为什么。</span></h2><p>用户看到工作结果、匹配理由、特点、优点、限制、来源链接和安装边界，再决定下一步。</p><div class="quote">“把工具选择变成一项清晰、可回看的工作决策。”</div></div>
+    </section>
+
+    <section class="memory section-grid"><div class="section-intro"><p class="eyebrow">LEARNING LOOP</p><h2>越用越懂你的<br><span>工作方式。</span></h2><p>AgentFit 自动记录结构化工作模式，将任务类型、行业领域、受众和输出偏好沉淀为下一次推荐的上下文。</p></div><div class="memory-visual"><div class="memory-line"><div class="memory-node"><b>第 1 次</b><span>识别“制作 PPT”</span></div><div class="memory-arrow">→</div><div class="memory-node"><b>第 3 次</b><span>识别“行业研究 + 汇报”</span></div><div class="memory-arrow">→</div><div class="memory-node highlight"><b>形成模式</b><span>机器人行业 · 管理层</span></div></div><div class="memory-note"><span class="shield">✓</span><div><strong>本地、可查看、可删除</strong><p>能力 ID、受控业务领域、输出偏好和质量结果都由用户掌控。</p></div></div></div></section>
+
+    <section class="architecture" id="architecture"><div class="section-intro centered"><p class="eyebrow">EMBEDDED BY DESIGN</p><h2>AgentFit 服务主 Agent，<br><span>让每次交付更有路径。</span></h2><p>同一套能力路由逻辑，分别适配 Codex、Claude Code 和 WorkBuddy。</p></div><div class="host-map"><div class="host-card interactive" data-detail="codex"><span class="host-logo codex">C</span><strong>Codex</strong><small>执行与交付</small><span class="host-plus">+</span></div><div class="host-card interactive" data-detail="claude"><span class="host-logo claude">✦</span><strong>Claude Code</strong><small>执行与交付</small><span class="host-plus">+</span></div><div class="host-card interactive" data-detail="workbuddy"><span class="host-logo work">W</span><strong>WorkBuddy</strong><small>执行与交付</small><span class="host-plus">+</span></div><div class="agentfit-core"><span class="core-mark">A</span><strong>AgentFit</strong><small>路由 · 记忆 · 发现 · 质量检查</small></div></div></section>
+
+    <section class="roadmap section-grid" id="roadmap"><div class="section-intro"><p class="eyebrow">ROADMAP</p><h2>从降低门槛，<br><span>到协作智能。</span></h2><p>先让用户稳定得到好结果，再扩展到持续发现和多 Skill 组合。</p></div><div class="roadmap-track"><article class="roadmap-card done interactive" data-detail="p0"><div class="roadmap-top"><span>P0</span><b>现在</b></div><h3>可控的任务闭环</h3><ul><li>任务识别与最小工作流</li><li>已有能力复用与缺口发现</li><li>安装确认、主 Agent 交接、质量检查</li></ul><span class="card-arrow">→</span></article><article class="roadmap-card current interactive" data-detail="p1"><div class="roadmap-top"><span>P1</span><b>下一步</b></div><h3>个性化能力目录</h3><ul><li>更细的工作画像与成功流程复用</li><li>每日调研新 Skill、MCP 和插件</li><li>推送与用户相关的新候选</li></ul><span class="card-arrow">→</span></article><article class="roadmap-card interactive" data-detail="p2"><div class="roadmap-top"><span>P2</span><b>未来</b></div><h3>组合式 Agent 工作流</h3><ul><li>组合研究、分析、写作和制作</li><li>跨宿主协作与效果评估</li><li>把多个 Skill 重写成新的工作能力</li></ul><span class="card-arrow">→</span></article></div></section>
+
+    <section class="closing"><div class="closing-inner"><p class="eyebrow">THE PROMISE</p><h2>让十几个 AI 初学者，<br><span>都能把工作交给 AI。</span></h2><p>他们从一句自然语言开始，沿着清晰的能力路径完成交付。</p><a class="button primary" href="#top">重新看一遍 Demo <span>↗</span></a></div></section>
+    <section class="live-demo" id="live-demo">
+      <div class="section-intro centered">
+        <p class="eyebrow">LIVE TASK CONSOLE</p>
+        <h2>用一次真实任务，<br><span>看见每个可控节点。</span></h2>
+        <p>这个演示刻意保留“主 Agent 能力未知”的真实状态：先验证 inventory，再发现缺口，最后由用户决定是否安装和执行。</p>
+      </div>
+      <div class="console-shell">
+        <div class="console-topbar">
+          <div><span class="console-kicker">企业竞品调研</span><strong>分析 Notion、Coda 与 Slite 的 AI 协作能力</strong></div>
+          <div class="console-controls"><span class="host-pill"><span class="pulse"></span><b>Claude Code</b> · 主 Agent</span><button class="ghost-button" type="button" data-action="reset">重置演示</button></div>
+        </div>
+        <div class="console-body">
+          <div class="stage-rail" id="stageRail" role="tablist" aria-label="任务阶段">
+            <button class="stage active" type="button" data-stage="inventory" role="tab" aria-selected="true"><span>01</span><b>能力盘点</b><small>未知 → verified</small></button>
+            <button class="stage" type="button" data-stage="discover" role="tab" aria-selected="false"><span>02</span><b>发现候选</b><small>只搜缺口</small></button>
+            <button class="stage" type="button" data-stage="install" role="tab" aria-selected="false"><span>03</span><b>安装确认</b><small>用户把关</small></button>
+            <button class="stage" type="button" data-stage="execute" role="tab" aria-selected="false"><span>04</span><b>执行确认</b><small>主 Agent 执行</small></button>
+            <button class="stage" type="button" data-stage="quality" role="tab" aria-selected="false"><span>05</span><b>质量门禁</b><small>证据可追溯</small></button>
+          </div>
+          <div class="console-main">
+            <div class="console-context"><div><span class="label">任务目标</span><p>输出 6 页竞品调研简报：功能对比、定价、AI 能力、引用链接与结论。</p></div><div class="context-chips"><span>公开网页</span><span>中文输出</span><span>截止今天</span></div></div>
+            <div class="stage-panel" data-panel="inventory">
+              <div class="panel-heading"><div><span class="label">HOST INVENTORY</span><h3>先确认主 Agent 到底会什么</h3></div><span class="state-badge warning" id="inventoryBadge">3 项待验证</span></div>
+              <p class="panel-note">AgentFit 不假设主 Agent 有 MCP。每个能力必须从宿主暴露的清单或一次探测调用中得到证据。</p>
+              <div class="inventory-list">
+                <div class="inventory-row" data-capability="web-search"><div class="cap-icon search">W</div><div class="cap-info"><strong>网页检索与抓取</strong><small>web-search · 访问公开竞品页面</small></div><span class="inventory-status unknown">unknown</span><button class="row-action" type="button" data-action="verify" data-target="web-search">验证</button></div>
+                <div class="inventory-row" data-capability="citations"><div class="cap-icon cite">C</div><div class="cap-info"><strong>引用与来源管理</strong><small>citations · 保留 URL、日期和摘录</small></div><span class="inventory-status unknown">unknown</span><button class="row-action" type="button" data-action="verify" data-target="citations">验证</button></div>
+                <div class="inventory-row" data-capability="pptx"><div class="cap-icon deck">P</div><div class="cap-info"><strong>可编辑简报输出</strong><small>presentation · 生成 PPTX 或 HTML</small></div><span class="inventory-status verified">verified</span><span class="row-hint">已发现</span></div>
+              </div>
+              <div class="panel-footer"><span id="inventoryHint">建议先验证网页检索，避免盲目搜索和安装。</span><button class="button primary compact" type="button" data-action="verify-all">验证全部</button></div>
+            </div>
+            <div class="stage-panel hidden" data-panel="discover">
+              <div class="panel-heading"><div><span class="label">GAP-ONLY DISCOVERY</span><h3>只为缺口生成候选</h3></div><span class="state-badge" id="candidateBadge">2 个候选</span></div>
+              <p class="panel-note">基于已验证的能力和企业约束，AgentFit 从 GitHub / 内部目录搜寻可解释候选，不自动安装。</p>
+              <div class="candidate-list"><div class="candidate-row"><div class="candidate-rank">01</div><div><strong>Browser MCP</strong><small>网页访问 · 12.4k stars · MIT</small><div class="candidate-tags"><span>支持 Claude Code</span><span>可审计</span></div></div><button class="row-action" type="button" data-action="select-candidate">查看详情</button></div><div class="candidate-row"><div class="candidate-rank">02</div><div><strong>Firecrawl MCP</strong><small>检索与清洗 · 企业版可控 · API key</small><div class="candidate-tags"><span>需网络权限</span><span>成本可预估</span></div></div><button class="row-action" type="button" data-action="select-candidate">查看详情</button></div></div>
+              <div class="panel-footer"><span>发现结果会进入安装确认，不会直接改变主 Agent。</span><button class="button primary compact" type="button" data-action="to-install">进入安装确认</button></div>
+            </div>
+            <div class="stage-panel hidden" data-panel="install">
+              <div class="panel-heading"><div><span class="label">HITL · INSTALL</span><h3>用户确认后才安装</h3></div><span class="state-badge warning">等待确认</span></div>
+              <div class="approval-card"><div class="approval-icon">!</div><div><strong>Browser MCP</strong><p>将新增网页访问能力，需要允许访问公开网站；不会读取本地文件。</p><div class="approval-meta"><span>权限：网络</span><span>来源：GitHub</span><span>风险：中</span></div></div><label class="check-control"><input type="checkbox" data-action="consent-install"> 我已了解</label></div>
+              <div class="panel-footer"><span>安装动作可撤回，并记录版本、来源与批准人。</span><button class="button primary compact" type="button" data-action="install" disabled>确认安装</button></div>
+            </div>
+            <div class="stage-panel hidden" data-panel="execute">
+              <div class="panel-heading"><div><span class="label">HITL · EXECUTION</span><h3>明确边界，再交给主 Agent</h3></div><span class="state-badge warning">等待确认</span></div>
+              <div class="execution-plan"><div class="plan-line"><span>01</span><div><strong>抓取公开竞品页面</strong><small>不登录、不提交表单、不访问内网</small></div><b>可执行</b></div><div class="plan-line"><span>02</span><div><strong>抽取功能、定价与 AI 证据</strong><small>每个结论必须绑定 URL 与抓取时间</small></div><b>可执行</b></div><div class="plan-line"><span>03</span><div><strong>生成 6 页简报</strong><small>写入当前项目目录，生成后进入质量门禁</small></div><b>可执行</b></div></div>
+              <div class="panel-footer"><span>执行期间 AgentFit 只做监控与暂停，不替主 Agent 决策。</span><button class="button primary compact" type="button" data-action="execute" disabled>确认执行</button></div>
+            </div>
+            <div class="stage-panel hidden" data-panel="quality">
+              <div class="panel-heading"><div><span class="label">QUALITY GATE</span><h3>先过门禁，再交付结果</h3></div><span class="state-badge success">可交付</span></div>
+              <div class="quality-grid"><div><span class="quality-score">92</span><small>综合质量分</small></div><div class="quality-check"><span>✓</span><div><strong>来源覆盖</strong><small>18 / 18 个关键结论有引用</small></div></div><div class="quality-check"><span>✓</span><div><strong>新鲜度</strong><small>全部来源在 7 天内更新</small></div></div><div class="quality-check fail"><span>!</span><div><strong>冲突检测</strong><small>1 个定价差异需要人工确认</small></div></div></div>
+              <div class="panel-footer"><span>门禁发现 1 个待人工确认项，结果暂不标记为最终版。</span><button class="button primary compact" type="button" data-action="review">打开复核清单</button></div>
+            </div>
+          </div>
+          <aside class="audit-panel"><div class="audit-heading"><span class="label">AUDIT TRAIL</span><span class="live-dot">LIVE</span></div><div class="audit-list" id="auditList"><div class="audit-item"><span class="audit-time">刚刚</span><p><b>任务已创建</b><small>竞品调研 · Claude Code</small></p></div><div class="audit-item pending"><span class="audit-time">等待</span><p><b>读取主 Agent inventory</b><small>尚未获得网页检索证据</small></p></div></div><div class="audit-foot"><span class="shield">✓</span><span>每次安装、执行和结果变更都有记录</span></div></aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <aside class="detail-drawer" id="detailDrawer" aria-live="polite"><button class="drawer-close" type="button" aria-label="关闭详情">×</button><p class="eyebrow">DETAIL VIEW</p><h2 id="detailTitle">任务步骤</h2><p id="detailText"></p><div class="drawer-meta" id="detailMeta"></div></aside>
+  <footer><span>AgentFit · Embedded capability routing layer</span><span>Product Demo · 2026</span></footer>
+  <script src="app.js"></script>
+</body>
+</html>

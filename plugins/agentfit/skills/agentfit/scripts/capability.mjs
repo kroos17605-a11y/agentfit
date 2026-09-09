@@ -5,6 +5,8 @@ const INFERRED_CAPABILITIES = Object.freeze([
   { pattern: /(?:^|[.:/_-])browser(?:$|[.:/_-])|web[-_ ]?(?:search|browse)|playwright/iu, capabilityIds: ['research-with-citations'] },
   { pattern: /pptx|powerpoint|presentation[-_ ]?(?:creator|production|generator)|slides?[-_ ]?(?:creator|production|generator)/iu, capabilityIds: ['presentation-production'] },
   { pattern: /imagegen|image[-_ ]?generation|visual[-_ ]?design/iu, capabilityIds: ['presentation-design'] }
+  ,{ pattern: /(?:^|[.:/_-])(?:word|docx|document)(?:$|[.:/_-])|track[-_ ]?changes|修订|文档编辑/iu, capabilityIds: ['document-editing'] }
+  ,{ pattern: /(?:data[-_ ]?analysis|spreadsheet|excel|csv|数据分析|表格)/iu, capabilityIds: ['public-data-analysis'] }
 ]);
 
 export class CapabilityInventoryError extends Error {
@@ -44,6 +46,12 @@ export function normalizeInstalledComponent(component, index = 0) {
   const enabled = component.enabled == null
     ? !['disabled', 'unavailable', 'not-installed', 'not installed'].includes(normalizedStatus)
     : component.enabled !== false;
+  // A declared component is not proof that it is callable in this session.
+  // Unknown/auth-required states remain visible for diagnosis but cannot satisfy a step.
+  const callable = component.callable == null
+    ? !['unknown', 'auth-required', 'authentication-required', 'unavailable', 'not-installed', 'not installed'].includes(normalizedStatus)
+    : component.callable === true;
+  const dependencyIssues = strings(component.dependencyIssues ?? component.missingDependencies, `components[${index}].dependencyIssues`);
   return {
     id: requiredText(component.id, `components[${index}].id`),
     name: requiredText(component.name ?? component.id, `components[${index}].name`),
@@ -57,6 +65,10 @@ export function normalizeInstalledComponent(component, index = 0) {
     permissions: strings(component.permissions, `components[${index}].permissions`),
     riskLevel,
     enabled,
+    callable,
+    availability: callable && enabled ? 'callable' : normalizedStatus || 'unknown',
+    dependencyIssues,
+    qualityRoles: strings(component.qualityRoles ?? component.qualityEnhancers, `components[${index}].qualityRoles`),
     setupCost: Number.isFinite(component.setupCost) ? Math.max(0, Number(component.setupCost)) : 0
   };
 }
@@ -75,14 +87,14 @@ export function normalizeCapabilityInventory(input = {}) {
 
 function historyComponentIds(successfulWorkflows) {
   return new Set((successfulWorkflows ?? [])
-    .filter((workflow) => workflow?.status === 'accepted' || workflow?.passed === true)
+    .filter((workflow) => workflow?.status === 'accepted' && workflow?.passed === true)
     .flatMap((workflow) => workflow.components ?? [])
     .map((component) => typeof component === 'string' ? component : component?.id)
     .filter(Boolean));
 }
 
 function componentMatches(component, step, hostPlatform) {
-  if (!component.enabled) return false;
+  if (!component.enabled || !component.callable || component.dependencyIssues.length > 0) return false;
   if (component.hostPlatforms.length > 0 && !component.hostPlatforms.includes(hostPlatform)) return false;
   if (component.capabilityIds.includes(step.capabilityId)) return true;
   return component.outputs.some((output) => (step.output ?? []).includes(output));
@@ -100,7 +112,7 @@ function compareComponents(left, right, reusedIds) {
   return left.name.localeCompare(right.name);
 }
 
-export function resolveCapabilityPlan({ steps = [], inventory = [], successfulWorkflows = [], hostPlatform } = {}) {
+export function resolveCapabilityPlan({ steps = [], inventory = [], successfulWorkflows = [], hostPlatform, inventoryMode = 'legacy' } = {}) {
   const components = normalizeCapabilityInventory(inventory);
   const reusedIds = historyComponentIds(successfulWorkflows);
   const assignments = steps.map((step) => {
@@ -113,6 +125,16 @@ export function resolveCapabilityPlan({ steps = [], inventory = [], successfulWo
         reason: '该步骤属于主 Agent 的一般整合、分析或协调能力，不需要额外组件。'
       };
     }
+    if (inventoryMode === 'unknown') {
+      return {
+        stepOrder: step.order,
+        capabilityId: step.capabilityId,
+        status: 'capability-unknown',
+        component: null,
+        alternatives: [],
+        reason: '没有收到宿主当前会话的能力清单；不能把未知误报成没有 MCP，也不能直接开始缺口搜索。'
+      };
+    }
     const matches = components
       .filter((component) => componentMatches(component, step, hostPlatform))
       .sort((left, right) => compareComponents(left, right, reusedIds));
@@ -121,10 +143,12 @@ export function resolveCapabilityPlan({ steps = [], inventory = [], successfulWo
       return {
         stepOrder: step.order,
         capabilityId: step.capabilityId,
-        status: 'capability-gap',
+        status: inventoryMode === 'partial' ? 'capability-unknown' : 'capability-gap',
         component: null,
         alternatives: [],
-        reason: '当前宿主没有暴露可验证的匹配组件，需要只针对这个能力缺口进行外部发现。'
+        reason: inventoryMode === 'partial'
+          ? '宿主只提供了部分能力清单，未列出的组件仍然未知；先完成当前会话盘点，再判断是否需要搜索。'
+          : '当前宿主没有暴露可验证的匹配组件，需要只针对这个能力缺口进行外部发现。'
       };
     }
     return {
@@ -145,13 +169,20 @@ export function resolveCapabilityPlan({ steps = [], inventory = [], successfulWo
     name: component.name,
     type: component.type,
     enabled: component.enabled,
+    callable: component.callable,
+    availability: component.availability,
+    dependencyIssues: component.dependencyIssues,
     capabilityIds: component.capabilityIds,
     capabilityEvidence: component.capabilityEvidence,
     status: !component.enabled ? 'disabled'
+      : !component.callable ? 'unverified-callability'
+      : component.dependencyIssues.length > 0 ? 'blocked-dependencies'
       : matchedComponentIds.has(component.id) ? 'matched-to-workflow'
         : component.capabilityIds.length === 0 ? 'checked-unmapped'
           : 'checked-not-needed',
     reason: !component.enabled ? '宿主标记为不可用。'
+      : !component.callable ? '组件已申报，但当前会话不可证明可调用（可能需要登录、授权或运行时探针）。'
+      : component.dependencyIssues.length > 0 ? `组件匹配，但依赖未满足：${component.dependencyIssues.join('、')}。`
       : matchedComponentIds.has(component.id) ? '已匹配到本次工作流步骤。'
         : component.capabilityIds.length === 0 ? '已检查，但现有元数据不足以证明它能承担本次步骤。'
           : '已检查，能力与本次必要步骤不匹配。'
@@ -162,7 +193,8 @@ export function resolveCapabilityPlan({ steps = [], inventory = [], successfulWo
     assignments,
     gaps,
     discoveryCapabilityIds: gaps.map((gap) => gap.capabilityId),
-    readyForHostExecution: gaps.length === 0,
-    policy: 'reuse-successful → installed-and-compatible → discover-only-the-gap'
+    readyForHostExecution: gaps.length === 0 && !assignments.some((assignment) => assignment.status === 'capability-unknown'),
+    inventoryMode,
+    policy: 'verify-host-inventory → reuse-successful → installed-and-compatible → discover-only-the-gap'
   };
 }
